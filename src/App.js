@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Customerlist from './components/Customerlist'
 import Traininglist from './components/Traininglist'
+import Traininglistwith from './components/Traininglistwith'
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -37,13 +38,16 @@ function App() {
   };
   const [page, setPage] = React.useState();
   const changePage = (event) => {
-    if (event.target.value == 1){
+    if (event.target.value === 1){
      setPage(<Customerlist/>); 
-    } else if (event.target.value == 2){
+    } else if (event.target.value === 2){
       setPage(<Traininglist/>);
     }
+    else if (event.target.value === 3){
+      setPage(<Traininglistwith/>)
+    }
     
-    console.log(page);
+    
     handleClose();
   }
   return (
@@ -61,6 +65,8 @@ function App() {
             >
               <MenuItem value='1' onClick={changePage}>Customers</MenuItem>
               <MenuItem value='2' onClick={changePage}>Trainings</MenuItem>
+              <MenuItem value='3' onClick={changePage}>Trainings with customers</MenuItem>
+              <MenuItem value='4' onClick={changePage}>Calendar</MenuItem>
               <MenuItem value='' onClick={handleClose}>Logout</MenuItem>
             </Menu>
           </IconButton>
@@ -71,25 +77,11 @@ function App() {
         </Toolbar>
       </AppBar>
       {page}
-
+      <Traininglistwith/>
     </div>
+    
   );
 }
 
 export default App;
-/*<Customerlist/>
-<Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-        Open Menu
-      </Button>
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
-      </Menu>
-*/
+//<Customerlist/>

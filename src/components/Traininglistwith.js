@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import ReactTable from 'react-table-v6';
 import 'react-table-v6/react-table.css';
 import Button from '@material-ui/core/Button';
-import Addtraining from './Addtraining'
 
-export default function Traininglist() {
+export default function Traininglistwith() {
 
     const [trainings, setTrainings] = useState([]);
     useEffect(() => fetchData(), []);
 
     const fetchData = () => {
-        fetch('https://customerrest.herokuapp.com/api/trainings')
+        fetch('https://customerrest.herokuapp.com/gettrainings')
             .then(response => response.json())
-            .then(data => setTrainings(data.content))
+            .then(data => setTrainings(data))
     }
     const deleteTraining = (link) => {
         if (window.confirm('Are you sure?')) {
@@ -23,17 +22,7 @@ export default function Traininglist() {
             console.log()
         }
     }
-    const saveTraining = (training) => {
-        fetch('https://customerrest.herokuapp.com/api/trainings',{
-            method:'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(training)
-        })
-        .then(res => fetchData())
-        .catch(err => console.error(err))
-    }
+  
     const columns = [
         {
             Header: 'Date',
@@ -48,6 +37,10 @@ export default function Traininglist() {
             accessor: 'activity'
         },
         {
+            Header: 'Customer',
+            accessor: 'customer.firstname'
+        },
+        {
             sortable: false,
             filterable: false,
             width: 70,
@@ -59,7 +52,6 @@ export default function Traininglist() {
  
     return (
         <div>
-             <Addtraining saveTraining={saveTraining}/>
 <ReactTable filterable={true} data={trainings} columns={columns} />
         </div>
     );

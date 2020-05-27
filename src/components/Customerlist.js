@@ -1,45 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import ReactTable from 'react-table-v6';
 import 'react-table-v6/react-table.css';
-/*import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Addcar from './Addnewcar';
-import Editcar from './Editcar';*/
+import Button from '@material-ui/core/Button';
+import Addcustomer from './Addcustomer';
+import Editcustomer from './Editcustomer';
 
 export default function Customerlist() {
 
     const [customers, setCustomers] = useState([]);
-    /*const [open, setOpen] = useState(false);*/
+
     useEffect(() => fetchData(), []);
 
     const fetchData = () => {
         fetch('https://customerrest.herokuapp.com/api/customers')
             .then(response => response.json())
             .then(data => setCustomers(data.content))
+
     }
-    /*const deleteCar = (link) => {
+    const deleteCustomer = (link) => {
         if (window.confirm('Are you sure?')) {
             fetch(link, { method: 'DELETE' })
                 .then(res => fetchData())
                 .catch(err => console.error(err))
-                .then(handleClick())
+
+            console.log()
         }
     }
-    
-
-    const handleClick = () => {
-        setOpen(true);
-    }
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    }*/
 
     const columns = [
         {
@@ -69,68 +55,50 @@ export default function Customerlist() {
         {
             Header: 'Phone',
             accessor: 'phone'
-        }/*,
+        }, //Edit funktion kutsu
         {
             sortable: false,
             filterable: false,
             width: 70,
-            Cell: row => <Editcar updateCar={updateCar} car={row.original}/>
+            Cell: row => <Editcustomer updateCustomer={updateCustomer} customer={row.original}/>
         },
         {
             sortable: false,
             filterable: false,
             width: 70,
-            accessor: '_links.self.href',
-            Cell: row => <Button size='small' color='secondary' onClick={() => deleteCar(row.value)}>Delete</Button>
-        }*/
+            accessor: 'links[0].href'
+            , Cell: row => <Button size='small' color='secondary' onClick={() => deleteCustomer(row.value)}>Delete</Button>
+        }
     ]
-    /*const saveCar = (car) => {
-        fetch('https://carstockrest.herokuapp.com/cars',{
+    // Tallennus
+    const saveCustomer = (customer) => {
+        fetch('https://customerrest.herokuapp.com/api/customers',{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(car)
+            body: JSON.stringify(customer)
         })
         .then(res => fetchData())
         .catch(err => console.error(err))
     }
-    const updateCar = (car, link) =>{
+   // Editointi
+    const updateCustomer = (customer, link) =>{
         fetch(link,{
             method:'PUT',
             headers:{
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(car)
+            body: JSON.stringify(customer)
         })
         .then(res => fetchData())
         .catch(err => console.error(err))
-    }*/
+    }
 
     return (
         <div>
-<ReactTable filterable={true} data={customers} columns={columns} />
+            <Addcustomer saveCustomer={saveCustomer}/>
+            <ReactTable filterable={true} data={customers} columns={columns} />
         </div>
     );
 }
-/*
-            <Addcar saveCar={saveCar}/>
-            <ReactTable filterable={true} data={cars} columns={columns} />
-            <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                message="Car Deleted"
-                action={
-                    <React.Fragment>
-                        <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                            <CloseIcon fontSize="small" />
-                        </IconButton>
-                    </React.Fragment>
-                }
-            />
-*/
